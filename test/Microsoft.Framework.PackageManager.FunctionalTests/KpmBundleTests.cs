@@ -12,7 +12,7 @@ namespace Microsoft.Framework.PackageManager
     public class KpmPackTests
     {
         private readonly string _projectName = "TestProject";
-        private readonly string _outputDirName = "PackOutput";
+        private readonly string _outputDirName = "BundleOutput";
 
         private static readonly string BatchFileTemplate = @"
 @""{0}dotnet.exe"" --appbase ""%~dp0approot\src\{1}"" Microsoft.Framework.ApplicationHost {2} %*
@@ -45,7 +45,7 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
         [Theory]
         [MemberData("DotnetHomeDirs")]
-        public void KpmPackWebApp_RootAsPublicFolder(DisposableDir dotnetHomeDir)
+        public void KpmBundleWebApp_RootAsPublicFolder(DisposableDir dotnetHomeDir)
         {
             var projectStructure = @"{
   '.': ['project.json', 'Config.json', 'Program.cs', 'build_config1.bconfig'],
@@ -101,9 +101,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0} --wwwroot . --wwwroot-out wwwroot",
-                        testEnv.PackOutputDirPath),
+                        testEnv.BundleOutputDirPath),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -132,14 +132,14 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
     <add key=""dotnet-app-base"" value=""..\approot\src\{0}"" />
   </appSettings>
 </configuration>", testEnv.ProjectName);
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
 
         [Theory]
         [MemberData("DotnetHomeDirs")]
-        public void KpmPackWebApp_SubfolderAsPublicFolder(DisposableDir dotnetHomeDir)
+        public void KpmBundleWebApp_SubfolderAsPublicFolder(DisposableDir dotnetHomeDir)
         {
             var projectStructure = @"{
   '.': ['project.json', 'Config.json', 'Program.cs'],
@@ -194,9 +194,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0} --wwwroot-out wwwroot",
-                        testEnv.PackOutputDirPath),
+                        testEnv.BundleOutputDirPath),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -221,14 +221,14 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
     <add key=""dotnet-app-base"" value=""..\approot\src\{0}"" />
   </appSettings>
 </configuration>", testEnv.ProjectName);
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
 
         [Theory]
         [MemberData("DotnetHomeDirs")]
-        public void KpmPackConsoleApp(DisposableDir dotnetHomeDir)
+        public void KpmBundleConsoleApp(DisposableDir dotnetHomeDir)
         {
             var projectStructure = @"{
   '.': ['project.json', 'Config.json', 'Program.cs'],
@@ -267,9 +267,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0}",
-                        testEnv.PackOutputDirPath),
+                        testEnv.BundleOutputDirPath),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -282,7 +282,7 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
   ""dependencies"": {},
   ""packages"": ""packages""
 }");
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
@@ -356,9 +356,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0}",
-                        testEnv.PackOutputDirPath),
+                        testEnv.BundleOutputDirPath),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -382,7 +382,7 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
   ""dependencies"": {},
   ""packages"": ""packages""
 }");
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
@@ -453,9 +453,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0}",
-                        testEnv.PackOutputDirPath),
+                        testEnv.BundleOutputDirPath),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -474,7 +474,7 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
   ""dependencies"": {},
   ""packages"": ""packages""
 }");
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
@@ -550,9 +550,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0}",
-                        testEnv.PackOutputDirPath),
+                        testEnv.BundleOutputDirPath),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -564,14 +564,14 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
   ""dependencies"": {},
   ""packages"": ""packages""
 }");
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
 
         [Theory]
         [MemberData("DotnetHomeDirs")]
-        public void VerifyDefaultPackExcludePatterns(DisposableDir dotnetHomeDir)
+        public void VerifyDefaultBundleExcludePatterns(DisposableDir dotnetHomeDir)
         {
             var projectStructure = @"{
   '.': ['project.json', 'File', '.FileStartingWithDot'],
@@ -617,9 +617,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0}",
-                        testEnv.PackOutputDirPath),
+                        testEnv.BundleOutputDirPath),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -631,14 +631,14 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
   ""dependencies"": {},
   ""packages"": ""packages""
 }");
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
 
         [Theory]
         [MemberData("DotnetHomeDirs")]
-        public void KpmPackWebApp_AppendToExistingWebConfig(DisposableDir dotnetHomeDir)
+        public void KpmBundleWebApp_AppendToExistingWebConfig(DisposableDir dotnetHomeDir)
         {
             var projectStructure = @"{
   '.': ['project.json'],
@@ -677,9 +677,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0} --wwwroot public --wwwroot-out wwwroot",
-                        testEnv.PackOutputDirPath),
+                        testEnv.BundleOutputDirPath),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -706,14 +706,14 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
     <add key=""dotnet-app-base"" value=""..\approot\src\{0}"" />
   </appSettings>
 </configuration>", testEnv.ProjectName);
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
 
         [Theory]
         [MemberData("DotnetHomeDirs")]
-        public void KpmPackWebApp_UpdateExistingWebConfig(DisposableDir dotnetHomeDir)
+        public void KpmBundleWebApp_UpdateExistingWebConfig(DisposableDir dotnetHomeDir)
         {
             var projectStructure = @"{
   '.': ['project.json'],
@@ -761,9 +761,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0} --wwwroot public --wwwroot-out wwwroot",
-                        testEnv.PackOutputDirPath),
+                        testEnv.BundleOutputDirPath),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -791,14 +791,14 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
     <add key=""dotnet-app-base"" value=""..\approot\src\{0}"" />
   </appSettings>
 </configuration>", testEnv.ProjectName);
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
 
         [Theory]
         [MemberData("DotnetHomeDirs")]
-        public void GenerateBatchFilesAndBashScriptsWithoutPackedRuntime(DisposableDir dotnetHomeDir)
+        public void GenerateBatchFilesAndBashScriptsWithoutBundledRuntime(DisposableDir dotnetHomeDir)
         {
             var projectStructure = @"{
   '.': ['project.json'],
@@ -838,9 +838,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0}",
-                        testEnv.PackOutputDirPath),
+                        testEnv.BundleOutputDirPath),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -867,14 +867,14 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
                     .WithFileContents("kestrel",
                         BashScriptTemplate, testEnv.ProjectName, string.Empty, "kestrel");
 
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
 
         [Theory]
         [MemberData("DotnetHomeDirs")]
-        public void GenerateBatchFilesAndBashScriptsWithPackedRuntime(DisposableDir dotnetHomeDir)
+        public void GenerateBatchFilesAndBashScriptsWithBundledRuntime(DisposableDir dotnetHomeDir)
         {
             // Each runtime home only contains one runtime package, which is the one we are currently testing against
             var runtimeRoot = Directory.EnumerateDirectories(Path.Combine(dotnetHomeDir, "runtimes"), "dotnet-*").First();
@@ -923,9 +923,9 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
 
                 var exitCode = KpmTestUtils.ExecKpm(
                     dotnetHomeDir,
-                    subcommand: "pack",
+                    subcommand: "bundle",
                     arguments: string.Format("--out {0} --runtime {1}",
-                        testEnv.PackOutputDirPath, runtimeName),
+                        testEnv.BundleOutputDirPath, runtimeName),
                     environment: environment,
                     workingDir: testEnv.ProjectPath);
                 Assert.Equal(0, exitCode);
@@ -965,7 +965,7 @@ exec ""{1}dotnet"" Microsoft.Framework.ApplicationHost {2} ""$@""".Replace("\r\n
                         BashScriptTemplate, testEnv.ProjectName, bashScriptBinPath, "kestrel")
                     .WithSubDir(Path.Combine("approot", "packages", runtimeName), runtimeSubDir);
 
-                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.PackOutputDirPath,
+                Assert.True(expectedOutputDir.MatchDirectoryOnDisk(testEnv.BundleOutputDirPath,
                     compareFileContents: true));
             }
         }
