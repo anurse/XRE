@@ -131,12 +131,15 @@ namespace Microsoft.Framework.PackageManager
 
                     context.Initialize(_buildOptions.Reports.Quiet);
 
-                    if (context.Build(warnings, errors) && _buildOptions.GeneratePackages)
+                    if (context.Build(warnings, errors))
                     {
-                        context.PopulateDependencies(packageBuilder);
-                        context.AddLibs(packageBuilder, "*.dll");
-                        context.AddLibs(packageBuilder, "*.xml");
-                        context.AddLibs(symbolPackageBuilder, "*.*");
+                        if (_buildOptions.GeneratePackages)
+                        {
+                            context.PopulateDependencies(packageBuilder);
+                            context.AddLibs(packageBuilder, "*.dll");
+                            context.AddLibs(packageBuilder, "*.xml");
+                            context.AddLibs(symbolPackageBuilder, "*.*");
+                        }
                     }
                     else
                     {
