@@ -1,0 +1,6 @@
+language: csharp
+sudo: false
+script:
+    - KRE_TRACE=1 BUILD_BRANCH="$TRAVIS_BRANCH" K_BUILD_VERSION="ci-travis-$TRAVIS_BUILD_NUMBER" ./build.sh
+env:
+    - KRE_FEED="https://www.myget.org/F/aspnetvolatile/api/v2"

@@ -1,0 +1,12 @@
+version: 1.0.0-ci-{build}
+os: Visual Studio 2015 CTP
+environment:
+  KRE_FEED: https://www.myget.org/F/aspnetvolatile/api/v2
+build_script:
+- ps: >-
+    $env:BUILD_BRANCH=$env:APPVEYOR_REPO_BRANCH
+    $env:KRE_TARGET_OS="WIN7_PLUS_CORESYSTEM"
+    $env:KRE_TRACE="1"
+    $env:K_BUILD_VERSION="ci-appveyor-$($env:APPVEYOR_BUILD_NUMBER)"
+    .\build.cmd
+test: off
